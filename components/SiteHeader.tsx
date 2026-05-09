@@ -14,7 +14,7 @@ export function SiteHeader() {
         <Link href="/#inventory">Buy</Link>
         <Link href="/sell">Sell</Link>
         <Link href="/how-it-works">How it works</Link>
-        <Link href="/services">Services</Link>
+        
       </nav>
       <div className="header-actions">
         <Link className="icon-button" href="/saved" aria-label="Saved vehicles">

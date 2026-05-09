@@ -61,7 +61,8 @@ export function VehicleCard({
             <span aria-hidden="true">{saved ? "\u2665" : "\u2661"}</span>
           </button>
         ) : null}
-        <span>{vehicle.priceSignal}</span>
+        <span className="price-signal">{vehicle.priceSignal}</span>
+        <span className="inspection-badge">Inspected</span>
       </div>
       <div className="vehicle-content">
         <div className="vehicle-title">
@@ -85,10 +86,6 @@ export function VehicleCard({
             <dd>{vehicle.transmission}</dd>
           </div>
         </dl>
-
-        <div className="card-actions">
-          <span className="inspection-badge">Inspected</span>
-        </div>
       </div>
     </article>
   );

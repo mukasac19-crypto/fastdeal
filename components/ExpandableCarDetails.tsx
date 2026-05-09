@@ -28,7 +28,7 @@ export function ExpandableCarDetails({
       <div className="section-heading">
         <div>
           <p className="eyebrow">Car details</p>
-          <h2>Key details first. More when you need them.</h2>
+          <h2>Vehicle details</h2>
         </div>
         <button
           className="ghost-button view-more-button"
@@ -43,9 +43,14 @@ export function ExpandableCarDetails({
         <DetailList
           title="Specifications"
           items={expanded ? specifications : specifications.slice(0, 4)}
+          className="detail-card spec-card"
         />
-        <DetailList title="History" items={expanded ? history : history.slice(0, 3)} />
-        <InspectionList items={expanded ? inspection : inspection.slice(0, 3)} />
+        <DetailList
+          title="History"
+          items={expanded ? history : history.slice(0, 3)}
+          className="detail-card history-card"
+        />
+        <InspectionList items={expanded ? inspection : inspection.slice(0, 3)} className="detail-card inspection-card" />
         {expanded ? (
           <>
             <FeatureList title="Comfort and equipment" items={equipment} />
@@ -59,9 +64,17 @@ export function ExpandableCarDetails({
   );
 }
 
-function DetailList({ title, items }: { title: string; items: DetailItem[] }) {
+function DetailList({
+  title,
+  items,
+  className = "detail-card"
+}: {
+  title: string;
+  items: DetailItem[];
+  className?: string;
+}) {
   return (
-    <article className="detail-card">
+    <article className={className}>
       <h3>{title}</h3>
       <dl>
         {items.map(([label, value]) => (
@@ -75,9 +88,15 @@ function DetailList({ title, items }: { title: string; items: DetailItem[] }) {
   );
 }
 
-function InspectionList({ items }: { items: DetailItem[] }) {
+function InspectionList({
+  items,
+  className = "detail-card"
+}: {
+  items: DetailItem[];
+  className?: string;
+}) {
   return (
-    <article className="detail-card">
+    <article className={className}>
       <h3>Inspection summary</h3>
       <dl>
         {items.map(([label, value]) => (

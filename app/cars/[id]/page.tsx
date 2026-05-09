@@ -85,7 +85,10 @@ export default async function CarDetailPage({
         </div>
 
         <aside className="detail-panel">
-          <p className="eyebrow">{vehicle.priceSignal}</p>
+          <div className="detail-pills">
+            <span className="inspection-badge">Inspected</span>
+            <span className="price-tag">{vehicle.priceSignal}</span>
+          </div>
           <h1>
             {vehicle.year} {vehicle.make} {vehicle.model}
           </h1>
