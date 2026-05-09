@@ -93,10 +93,6 @@ export default async function CarDetailPage({
             {vehicle.year} {vehicle.make} {vehicle.model}
           </h1>
           <strong className="detail-price">{currencyFormatter.format(vehicle.price)}</strong>
-          <p>
-            Promoted through FastDeal Rwanda with clearer information, buyer
-            screening, viewing support, and sale assistance.
-          </p>
           <div className="detail-actions">
             <Link className="primary-link" href="/contact">
               Ask about this car
@@ -151,23 +147,18 @@ export default async function CarDetailPage({
         </section>
       ) : null}
 
-      <section className="content-grid">
-        <article>
-          <h2>Supported by FastDeal</h2>
+      <section className="detail-cta-banner">
+        <div className="detail-cta-copy">
+          <p className="eyebrow">Want to sell your car too?</p>
+          <h2>List your car with FastDeal Rwanda.</h2>
           <p>
-            FastDeal helps with buyer enquiries, viewing coordination, negotiation
-            support, and closing assistance so the process is more organized.
+            Free valuation, professional photos, active marketing, and buyer
+            screening — we handle the heavy lifting.
           </p>
-          <Link href="/contact">Contact FastDeal</Link>
-        </article>
-        <article>
-          <h2>Want to sell yours?</h2>
-          <p>
-            Submit the vehicle details first. FastDeal can guide pricing, schedule
-            inspection, create better marketing, and help find serious buyers.
-          </p>
-          <Link href="/sell">Enter car details</Link>
-        </article>
+        </div>
+        <Link className="primary-link" href="/sell">
+          Sell my car
+        </Link>
       </section>
     </main>
   );

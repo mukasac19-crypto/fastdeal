@@ -27,7 +27,6 @@ export function ExpandableCarDetails({
     <section className="detail-section">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Car details</p>
           <h2>Vehicle details</h2>
         </div>
         <button

@@ -114,10 +114,14 @@ img {
   box-shadow: 0 6px 14px rgba(31, 63, 136, 0.32);
   color: white;
   display: inline-flex;
-  font-weight: 900;
   height: 38px;
   justify-content: center;
   width: 38px;
+}
+
+.brand-mark svg {
+  height: 22px;
+  width: 22px;
 }
 
 .desktop-nav {
@@ -2482,10 +2486,6 @@ h3 {
     font-size: 26px;
   }
 
-  .detail-actions {
-    grid-template-columns: 1fr;
-  }
-
   .sell-form,
   .workflow-form,
   .seller-form {
@@ -2650,6 +2650,18 @@ h3 {
   .brand-mark {
     height: 34px;
     width: 34px;
+  }
+
+  .brand-mark svg {
+    height: 20px;
+    width: 20px;
+  }
+
+  .detail-actions .primary-link,
+  .detail-actions .whatsapp-link,
+  .detail-actions .secondary-link {
+    min-width: 0;
+    padding: 0 12px;
   }
 
   .footer-nav {
