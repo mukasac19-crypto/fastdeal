@@ -1,0 +1,10 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" fill="#EEF2F5"/>
+  <rect x="220" y="362" width="760" height="118" rx="34" fill="#14213D"/>
+  <path d="M360 362L450 250H740L850 362H360Z" fill="#1D67D8"/>
+  <circle cx="400" cy="506" r="58" fill="#14213D"/>
+  <circle cx="800" cy="506" r="58" fill="#14213D"/>
+  <circle cx="400" cy="506" r="26" fill="#EEF2F5"/>
+  <circle cx="800" cy="506" r="26" fill="#EEF2F5"/>
+  <text x="600" y="620" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#5C667A">FastDeal Rwanda</text>
+</svg>
