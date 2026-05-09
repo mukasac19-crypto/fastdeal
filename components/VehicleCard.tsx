@@ -58,7 +58,17 @@ export function VehicleCard({
             onClick={handleSaveClick}
             aria-label={saved ? "Remove saved vehicle" : "Save vehicle"}
           >
-            <span aria-hidden="true">{saved ? "\u2665" : "\u2661"}</span>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill={saved ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.85A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10Z" />
+            </svg>
           </button>
         ) : null}
         <span className="price-signal">{vehicle.priceSignal}</span>

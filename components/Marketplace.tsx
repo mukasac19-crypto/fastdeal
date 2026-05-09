@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useSavedVehicles } from "@/components/useSavedVehicles";
 import { VehicleCard } from "@/components/VehicleCard";
 import { BODY_OPTIONS, FUEL_OPTIONS } from "@/lib/car-options";
 import { currencyFormatter } from "@/lib/format";
@@ -23,14 +25,20 @@ export function Marketplace({
   vehicles: Vehicle[];
   makeOptions: string[];
 }) {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams?.get("q") ?? "");
   const [make, setMake] = useState("Any make");
   const [body, setBody] = useState("Any body");
   const [fuel, setFuel] = useState("Any fuel");
   const [budget, setBudget] = useState(60000000);
   const [sort, setSort] = useState<SortOption>("Recommended");
-  const [saved, setSaved] = useState<string[]>([]);
+  const { ids: savedIds, toggle: toggleSaved } = useSavedVehicles();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  useEffect(() => {
+    const next = searchParams?.get("q") ?? "";
+    setQuery((current) => (current === next ? current : next));
+  }, [searchParams]);
 
   const makes = useMemo(
     () => ["Any make", ...Array.from(new Set(makeOptions))],
@@ -62,14 +70,6 @@ export function Marketplace({
         return Number(b.featured) - Number(a.featured) || b.qualityScore - a.qualityScore;
       });
   }, [vehicles, query, make, body, fuel, budget, sort]);
-
-  function toggleSaved(id: string) {
-    setSaved((current) =>
-      current.includes(id)
-        ? current.filter((savedId) => savedId !== id)
-        : [...current, id]
-    );
-  }
 
   function resetFilters() {
     setQuery("");
@@ -146,9 +146,6 @@ export function Marketplace({
 
       <section className="inventory-section" id="inventory">
         <div className="section-heading">
-          <div>
-            <h2>{filteredVehicles.length} inspected cars</h2>
-          </div>
           <div className="sort-row">
             <Select label="Sort" value={sort} onChange={setSort} options={[...sortOptions]} />
             <button className="ghost-button" type="button" onClick={resetFilters}>
@@ -192,7 +189,7 @@ export function Marketplace({
                 <VehicleCard
                   key={vehicle.id}
                   vehicle={vehicle}
-                  saved={saved.includes(vehicle.id)}
+                  saved={savedIds.has(vehicle.id)}
                   onSave={() => toggleSaved(vehicle.id)}
                 />
               ))
