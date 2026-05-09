@@ -1743,10 +1743,15 @@ h3 {
   }
 
   .section-heading,
-  .vehicle-title,
-  .card-actions {
+  .vehicle-title {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .card-actions {
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
   }
 
   .sort-row {
@@ -1851,6 +1856,14 @@ h3 {
   .card-actions {
     gap: 10px;
     padding-top: 12px;
+  }
+
+  .inspection-badge {
+    align-self: flex-start;
+    display: inline-flex;
+    font-size: 10px;
+    padding: 6px 10px;
+    width: auto;
   }
 
   .inventory-section,
