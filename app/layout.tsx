@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/components/AuthProvider";
+import { SiteChrome } from "@/components/SiteChrome";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -20,10 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <SiteHeader />
-          {children}
-          <SiteFooter />
-          <WhatsAppFloat />
+          <SiteChrome
+            header={<SiteHeader />}
+            footer={<SiteFooter />}
+            whatsapp={<WhatsAppFloat />}
+          >
+            {children}
+          </SiteChrome>
         </AuthProvider>
       </body>
     </html>

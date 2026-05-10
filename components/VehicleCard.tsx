@@ -51,6 +51,32 @@ export function VehicleCard({
           fill
           sizes="(max-width: 860px) 100vw, (max-width: 1100px) 50vw, 40vw"
         />
+        {vehicle.images[1] ? (
+          <Image
+            src={vehicle.images[1]}
+            alt=""
+            fill
+            sizes="(max-width: 860px) 100vw, (max-width: 1100px) 50vw, 40vw"
+            className="vehicle-media-secondary"
+            aria-hidden="true"
+          />
+        ) : null}
+        {vehicle.images.length > 1 ? (
+          <span className="vehicle-photo-count" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z" />
+              <circle cx="12" cy="13" r="3.5" />
+            </svg>
+            {vehicle.images.length}
+          </span>
+        ) : null}
         {onSave ? (
           <button
             className={`save-button ${saved ? "is-saved" : ""}`}
