@@ -13,6 +13,7 @@ export type Vehicle = {
   listedBy: string;
   qualityScore: number;
   image: string;
+  images: string[];
   tags: string[];
   inspected: boolean;
   featured: boolean;
@@ -58,6 +59,7 @@ export type VehicleRow = {
   listed_by: string | null;
   quality_score: number | null;
   primary_image_url: string | null;
+  image_urls: string[] | null;
   tags: string[] | null;
   inspected: boolean | null;
   featured: boolean | null;

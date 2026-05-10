@@ -1,52 +1,76 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedVehicles } from "@/components/useSavedVehicles";
 import { VehicleCard } from "@/components/VehicleCard";
-import type { Vehicle } from "@/lib/listings";
+import type { Vehicle, VehicleRow } from "@/lib/listings";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { mapVehicleRow } from "@/lib/vehicle-mapper";
+
+type SavedRow = {
+  vehicle_id: string;
+  vehicles: VehicleRow | null;
+};
 
 export default function SavedPage() {
   const { user, loading: authLoading } = useAuth();
-  const { ids, toggle, loading: savesLoading } = useSavedVehicles();
+  const { ids, toggle } = useSavedVehicles();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [vehiclesLoading, setVehiclesLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      try {
-        const response = await fetch("/api/listings", { cache: "no-store" });
-        const result = await response.json();
-        if (!cancelled && response.ok) {
-          setVehicles(result.vehicles ?? []);
+      if (!user) {
+        if (!cancelled) {
+          setVehicles([]);
+          setLoading(false);
         }
-      } catch {
-        if (!cancelled) setVehicles([]);
-      } finally {
-        if (!cancelled) setVehiclesLoading(false);
+        return;
       }
+
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("saved_vehicles")
+        .select("vehicle_id, vehicles(*)")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error("Failed to load saved vehicles", error);
+        setVehicles([]);
+      } else {
+        const rows = (data ?? []) as unknown as SavedRow[];
+        setVehicles(
+          rows
+            .filter((row): row is SavedRow & { vehicles: VehicleRow } =>
+              Boolean(row.vehicles)
+            )
+            .map((row) => mapVehicleRow(row.vehicles))
+        );
+      }
+      setLoading(false);
     }
 
-    if (user) {
-      load();
-    } else {
-      setVehiclesLoading(false);
-    }
+    if (!authLoading) load();
 
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [user, authLoading, ids]);
 
-  const savedVehicles = useMemo(
-    () => vehicles.filter((vehicle) => ids.has(vehicle.id)),
-    [vehicles, ids]
-  );
-
-  if (authLoading) {
+  if (authLoading || loading) {
     return (
       <main>
         <section className="page-hero">
@@ -82,20 +106,7 @@ export default function SavedPage() {
     );
   }
 
-  if (savesLoading || vehiclesLoading) {
-    return (
-      <main>
-        <section className="page-hero">
-          <div>
-            <p className="eyebrow">Saved cars</p>
-            <h1>Loading your shortlist...</h1>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (savedVehicles.length === 0) {
+  if (vehicles.length === 0) {
     return (
       <main>
         <section className="page-hero">
@@ -123,9 +134,9 @@ export default function SavedPage() {
         <div>
           <p className="eyebrow">Saved cars</p>
           <h1>
-            {savedVehicles.length === 1
+            {vehicles.length === 1
               ? "1 saved car"
-              : `${savedVehicles.length} saved cars`}
+              : `${vehicles.length} saved cars`}
           </h1>
           <p>Your shortlist, ready when you are.</p>
         </div>
@@ -135,7 +146,7 @@ export default function SavedPage() {
       </section>
       <section className="inventory-section">
         <div className="vehicle-grid">
-          {savedVehicles.map((vehicle) => (
+          {vehicles.map((vehicle) => (
             <VehicleCard
               key={vehicle.id}
               vehicle={vehicle}

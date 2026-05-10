@@ -1,15 +1,17 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExpandableCarDetails } from "@/components/ExpandableCarDetails";
 import { VehicleCard } from "@/components/VehicleCard";
+import { VehicleGallery } from "@/components/VehicleGallery";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { currencyFormatter, numberFormatter } from "@/lib/format";
-import type { Vehicle } from "@/lib/listings";
-import { getPublishedVehicleById, getPublishedVehicles } from "@/lib/vehicles";
+import {
+  getPublishedVehicleById,
+  getRelatedVehicles
+} from "@/lib/vehicles";
 import { getWhatsAppHref } from "@/lib/whatsapp";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 type DetailItem = [string, string];
 
@@ -19,14 +21,13 @@ export default async function CarDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [vehicle, allVehicles] = await Promise.all([
-    getPublishedVehicleById(id),
-    getPublishedVehicles()
-  ]);
+  const vehicle = await getPublishedVehicleById(id);
 
   if (!vehicle) {
     notFound();
   }
+
+  const relatedVehicles = await getRelatedVehicles(vehicle);
 
   const overview: DetailItem[] = [
     ["Mileage", `${numberFormatter.format(vehicle.mileage)} km`],
@@ -69,18 +70,14 @@ export default async function CarDetailPage({
     `Hello FastDeal Rwanda, I am interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} listed for ${currencyFormatter.format(vehicle.price)}. Can you share more details?`
   );
   const isExternalWhatsApp = whatsappHref.startsWith("http");
-  const relatedVehicles = getRelatedVehicles(vehicle, allVehicles);
 
   return (
     <main>
       <section className="detail-layout">
         <div className="detail-media">
-          <Image
-            src={vehicle.image}
+          <VehicleGallery
+            images={vehicle.images}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-            fill
-            priority
-            sizes="(max-width: 980px) 100vw, 58vw"
           />
         </div>
 
@@ -164,19 +161,3 @@ export default async function CarDetailPage({
   );
 }
 
-function getRelatedVehicles(vehicle: Vehicle, vehicles: Vehicle[]) {
-  return vehicles
-    .filter((candidate) => candidate.id !== vehicle.id)
-    .map((candidate) => {
-      const score =
-        Number(candidate.make === vehicle.make) * 4 +
-        Number(candidate.body === vehicle.body) * 3 +
-        Number(candidate.fuel === vehicle.fuel) * 2 +
-        Number(candidate.transmission === vehicle.transmission);
-
-      return { vehicle: candidate, score };
-    })
-    .sort((a, b) => b.score - a.score || b.vehicle.qualityScore - a.vehicle.qualityScore)
-    .slice(0, 4)
-    .map(({ vehicle: relatedVehicle }) => relatedVehicle);
-}

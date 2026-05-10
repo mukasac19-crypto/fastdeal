@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/server";
 import { getPublishedVehicles } from "@/lib/vehicles";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function GET() {
   if (!isSupabaseConfigured()) {
@@ -14,7 +14,15 @@ export async function GET() {
 
   try {
     const vehicles = await getPublishedVehicles();
-    return NextResponse.json({ vehicles });
+    return NextResponse.json(
+      { vehicles },
+      {
+        headers: {
+          "Cache-Control":
+            "public, s-maxage=60, stale-while-revalidate=300"
+        }
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unable to load listings" },
