@@ -2358,6 +2358,10 @@ h3 {
   transform: translateY(-1px);
 }
 
+.seller-form button[type="submit"] {
+  margin-top: 6px;
+}
+
 .seller-form button:disabled,
 .workflow-form button:disabled {
   cursor: wait;
@@ -5187,6 +5191,36 @@ h3 {
 
   .seller-form .form-section legend {
     font-size: 16px;
+  }
+
+  .seller-form {
+    padding-bottom: 24px;
+  }
+
+  .seller-form button[type="submit"] {
+    margin-top: 10px;
+    min-height: 56px;
+    font-size: 15px;
+  }
+
+  .seller-terms {
+    align-items: flex-start;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    gap: 12px;
+    padding: 6px 2px 4px;
+  }
+
+  .seller-terms input[type="checkbox"] {
+    height: 22px;
+    margin-top: 0;
+    width: 22px;
+  }
+
+  .seller-terms span {
+    font-size: 14px;
+    line-height: 1.5;
   }
 }
 
