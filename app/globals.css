@@ -1892,12 +1892,8 @@ h3 {
 }
 
 @media (max-width: 720px) {
-  .gallery-thumb {
-    height: 60px;
-  }
-
   .gallery-thumbs {
-    grid-auto-columns: 84px;
+    display: none;
   }
 
   .gallery-nav {
